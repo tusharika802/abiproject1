@@ -1,0 +1,103 @@
+<h2 class="text-primary">Student List</h2>
+<hr />
+<div class="row m-2 p-2" style="text-align: right;">
+  <p-button icon="pi pi-plus" label="Add Student" class="me-2" (click)="addClick()"></p-button>
+</div>
+
+<div class="col-md-12">
+  <p-table [value]="studentsList" [tableStyle]="{ 'min-width': '5rem' }"
+    class="p-datatable-sm table table-bordered table-striped rounded shadow-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Course</th>
+        <th>Country</th>
+        <th>State</th>
+        <th>City</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td>{{ rowData.id }}</td>
+        <td>{{ rowData.name }}</td>
+        <td>{{ rowData.course }}</td>
+        <td>{{ rowData.country }}</td>
+        <td>{{ rowData.state }}</td>
+        <td>{{ rowData.city }}</td>
+        <td>
+          <p-button icon="pi pi-pencil" label="Edit" class="me-2" size="small" (click)="editClick(rowData)"></p-button>
+          <p-button icon="pi pi-trash" label="Delete" severity="danger" size="small" (click)="deleteClick(rowData.id)"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Add Dialog -->
+<p-dialog header="Add New Student" [(visible)]="displayAddDialog" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000">
+  <div class="form-container">
+    <div class="form-field">
+      <label>Name</label>
+      <input type="text" pInputText [(ngModel)]="newStudent.name" class="form-input" placeholder="Enter Name" />
+    </div>
+    <div class="form-field">
+      <label>Course</label>
+      <input type="text" pInputText [(ngModel)]="newStudent.course" class="form-input" placeholder="Enter Course" />
+    </div>
+    <div class="form-field">
+      <label>Country</label>
+      <input type="text" pInputText [(ngModel)]="newStudent.country" class="form-input" placeholder="Enter Country" />
+    </div>
+    <div class="form-field">
+      <label>State</label>
+      <input type="text" pInputText [(ngModel)]="newStudent.state" class="form-input" placeholder="Enter State" />
+    </div>
+    <div class="form-field">
+      <label>City</label>
+      <input type="text" pInputText [(ngModel)]="newStudent.city" class="form-input" placeholder="Enter City" />
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" icon="pi pi-times" (click)="displayAddDialog = false" styleClass="p-button-text"></p-button>
+    <p-button label="Save" icon="pi pi-check" (click)="saveClick()" [disabled]="!isFormValid()" autofocus></p-button>
+  </ng-template>
+</p-dialog>
+
+
+<!-- Edit Dialog -->
+<p-dialog header="Edit Student" [(visible)]="displayEditDialog" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000">
+  <div class="form-container">
+    <div class="form-field">
+      <label>Name</label>
+      <input type="text" pInputText [(ngModel)]="editStudent.name" class="form-input" />
+    </div>
+    <div class="form-field">
+      <label>Course</label>
+      <input type="text" pInputText [(ngModel)]="editStudent.course" class="form-input" />
+    </div>
+    <div class="form-field">
+      <label>Country</label>
+      <input type="text" pInputText [(ngModel)]="editStudent.country" class="form-input" />
+    </div>
+    <div class="form-field">
+      <label>State</label>
+      <input type="text" pInputText [(ngModel)]="editStudent.state" class="form-input" />
+    </div>
+    <div class="form-field">
+      <label>City</label>
+      <input type="text" pInputText [(ngModel)]="editStudent.city" class="form-input" />
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" icon="pi pi-times" (click)="displayEditDialog = false" styleClass="p-button-text"></p-button>
+    <p-button label="Update" icon="pi pi-check" (click)="updateClick()" autofocus></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
