@@ -1,4 +1,4 @@
-import { CountryService } from './../country.service';
+import { CountryService } from '../services/country.service';
 import { Component, OnInit } from '@angular/core';
 import { MessageService,ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { Country } from '../country';
+import { Country } from '../class/country';
 
 @Component({
   selector: 'app-country',

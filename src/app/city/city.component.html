@@ -33,7 +33,7 @@
 </div>
 
 <!-- Add Dialog -->
-<p-dialog header="Add New City" [(visible)]="displayAddDialog" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000">
+<p-dialog header="Add New City" [(visible)]="displayAddDialog" [modal]="true" [style]="{ width: '450px', height: '500px' }" [baseZIndex]="10000">
   <div class="form-container">
     <div class="form-field">
       <label>City Name</label>
@@ -43,12 +43,19 @@
       <label>State Id</label>
       <input type="text" pInputText [(ngModel)]="newCity.stateId" class="form-input" placeholder="Enter State Id" />
     </div> -->
-    <div class="form-field">
+    <!-- <div class="form-field">
       <label>State Name</label>
       <input type="text" pInputText [(ngModel)]="newCity.stateName" class="form-input" placeholder="Enter State Name" />
-    </div>
+    </div> -->
+      <div class="card flex justify-content-center">
+    <p-dropdown 
+        [options]="sattes" 
+        (onChange)="onCityChange($event)"
+        optionLabel="name"
+        placeholder="Select a State" />
+</div>
   </div>
-  
+
   <ng-template pTemplate="footer">
     <p-button label="Cancel" icon="pi pi-times" (click)="displayAddDialog = false" styleClass="p-button-text"></p-button>
     <p-button label="Save" icon="pi pi-check" (click)="saveClick()" [disabled]="!isFormValid()" autofocus></p-button>
@@ -56,7 +63,7 @@
 </p-dialog>
 
 <!-- Edit Dialog -->
-<p-dialog header="Edit Student" [(visible)]="displayEditDialog" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000">
+<p-dialog header="Edit Student" [(visible)]="displayEditDialog" [modal]="true"[style]="{ width: '450px', height: '500px' }" [baseZIndex]="10000">
   <div class="form-container">
    <div class="form-field">
       <label>City Name</label>
@@ -66,10 +73,13 @@
       <label>State Id</label>
       <input type="text" pInputText [(ngModel)]="editCity.stateId" class="form-input" placeholder="Enter Course" />
     </div> -->
-    <div class="form-field">
-      <label>State Name</label>
-      <input type="text" pInputText [(ngModel)]="newCity.stateName" class="form-input" placeholder="Enter State Name" />
-    </div>
+     <div class="card flex justify-content-center">
+    <p-dropdown 
+        [options]="sattes" 
+        (onChange)="onCityChange($event)"
+        optionLabel="name"
+        placeholder="Select a State" />
+</div>
   </div>
   
   <ng-template pTemplate="footer">

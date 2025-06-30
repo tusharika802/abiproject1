@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MessageService,ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 // PrimeNG Modules
@@ -13,8 +14,10 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { City } from '../city';
-import { CityService } from '../city.service';
+
+import { CityService } from '../services/city.service';
+import { StateService } from '../services/state.service';
+import { City } from '../class/city';
 @Component({
   selector: 'app-city',
   standalone: true,
@@ -31,6 +34,7 @@ providers: [MessageService, ConfirmationService],
     InputTextModule,
     ToastModule,
     ConfirmDialogModule,
+    DropdownModule
 
   ]
 })
@@ -44,15 +48,31 @@ filteredCities: any;
 
   constructor(
     private cityService: CityService,
+    private stateService : StateService,
     private messageService: MessageService,
-      private confirmationService: ConfirmationService   // ✅ inject here
+      private confirmationService: ConfirmationService,
+      private ref : ChangeDetectorRef   // ✅ inject here
 
   ) {}
 
   ngOnInit(): void {
     this.getAll();
+    this.getStates();
   }
 
+  sattes : StatesInterface[] = [];
+  onCityChange(event : any):void{
+    console.log(event)
+  }
+  getStates():void{
+    this.stateService.getStatesV2().subscribe({
+      next:(valeus)=>{
+        this.sattes = valeus;
+        console.log(valeus)
+        this.ref.markForCheck();
+      }
+    })
+  }
   getAll(): void {
     this.cityService.getCities().subscribe({
       next: (res) => (this.cityList = res),
@@ -83,9 +103,9 @@ filteredCities: any;
         this.newCity = new City();
   
         this.messageService.add({
-          severity: response.success ? 'success' : 'warn',
-          summary: response.success ? 'Success' : 'Failed',
-          detail: response.message
+          severity: 'success',
+          summary: 'Success' ,
+          detail: response?.message
         });
       },
       error: (error) => {
@@ -160,4 +180,9 @@ filteredCities: any;
   }
   
   
-  
+  export interface StatesInterface {
+  id: number;
+  name: string;
+  countryId: number;
+  countryName: string;
+}

@@ -39,10 +39,12 @@
               }
             ],
             "styles": [
-           
-
-  "src/styles.scss"
-],
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "node_modules/primeng/resources/primeng.css",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/sweetalert2/dist/sweetalert2.min.css",
+              "src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -101,9 +103,9 @@
             ],
             "styles": [
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeng/resources/primeng.css",
               "node_modules/primeicons/primeicons.css",
-                "node_modules/sweetalert2/dist/sweetalert2.min.css",
+              "node_modules/sweetalert2/dist/sweetalert2.min.css",
               "src/styles.scss"
             ],
             "scripts": []

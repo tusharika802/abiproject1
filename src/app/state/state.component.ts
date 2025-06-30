@@ -1,10 +1,11 @@
-import { State } from './../state';
-import { Component, OnInit } from '@angular/core';
+import { State } from '../class/state';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MessageService,ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
+
 
 //PrimeNG Modules
 import { TableModule } from 'primeng/table';
@@ -13,7 +14,9 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { StateService } from '../state.service';
+import { StateService } from '../services/state.service';
+import { DropdownModule } from 'primeng/dropdown';
+import { CountryService } from '../services/country.service';
 
 @Component({
   selector: 'app-state',
@@ -30,25 +33,44 @@ import { StateService } from '../state.service';
     DialogModule,
     InputTextModule,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    DropdownModule
   ]
 })
 export class StateComponent implements OnInit {
   stateList: State[] = [];
   newState: State = new State();
   editState: State = new State();
+  countryList: any[] = [];
   displayAddDialog: boolean = false;
   displayEditDialog: boolean = false;
 
   constructor(
       private stateService:   StateService,
       private messageService: MessageService,
-        private confirmationService: ConfirmationService   // ✅ inject here
-  
+        private confirmationService: ConfirmationService,
+        private countryService: CountryService,
+      private ref : ChangeDetectorRef   // ✅ inject here
+
     ) {}
   
     ngOnInit(): void {
       this.getAll();
+      this.getCountries();
+    }
+    counties:CountriesInterface[] = [];
+    onCountryChange(event : any):void{
+      console.log(event)
+    }
+    getCountries():void{
+      this.countryService.getCountriesVS().subscribe({
+        next:(valuees)=>{
+          this.counties = valuees;
+          console.log(valuees)
+          this.ref.markForCheck();
+
+        }
+      })
     }
   getAll(): void {
       this.stateService.getStates().subscribe({
@@ -68,56 +90,64 @@ export class StateComponent implements OnInit {
     
          saving = false;
     
-    saveClick(): void {
-      console.log('Saving state:', this.newState);
-    
-      this.stateService.saveState(this.newState).subscribe({
-        next: (response) => {
-          console.log('Save response:', response); // { success: true, message: "..." }
-    
-          this.getAll();
-          this.displayAddDialog = false;
-          this.newState = new State();
-    
-          this.messageService.add({
-            severity: response.success ? 'success' : 'warn',
-            summary: response.success ? 'Success' : 'Failed',
-            detail: response.message
-          });
-        },
-        error: (error) => {
-          console.error('Save error:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Could not save state'
-          });
-        }
-      });
-    }
+      saveClick(): void {
+        console.log('Saving city:', this.newState);
+      
+        this.stateService.saveState(this.newState).subscribe({
+          next: (response) => {
+            console.log('Save response:', response); // { success: true, message: "..." }
+      
+            this.getAll();
+            this.displayAddDialog = false;
+            this.newState = new State();
+      
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success' ,
+              detail: response?.message
+            });
+          },
+          error: (error) => {
+            console.error('Save error:', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Could not save city'
+            });
+          }
+        });
+      }
       editClick(data: State): void {
         this.editState = { ...data };
         this.displayEditDialog = true;
       }
       updateClick(): void {
-    this.stateService.updateState(this.editState).subscribe({
-      next: () => {
-        this.getAll();
-        this.displayEditDialog = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Updated',
-          detail: 'State updated successfully'
+        this.stateService.updateState(this.editState).subscribe({
+          next: (response: { success: boolean; message: string }) => {
+            if (response.success) {
+              this.getAll();
+              this.displayEditDialog = false;
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: response.message || 'State updated successfully'
+              });
+            } else {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: response.message || 'Failed to update state'
+              });
+            }
+          },
+          error: () =>
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to update state'
+            })
         });
-      },
-      error: () =>
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to update state'
-        })
-    });
-  }
+      }
   deleteClick(id: number) {
     Swal.fire({
       title: 'Are you sure?',
@@ -153,5 +183,9 @@ export class StateComponent implements OnInit {
   
   }
   
-  
+  export interface CountriesInterface {
+  id: number;
+  name: string;
+ 
+}
   

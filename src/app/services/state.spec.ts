@@ -1,4 +1,4 @@
-import { State } from './state';
+import { State } from '../class/state';
 
 describe('State', () => {
   it('should create an instance', () => {

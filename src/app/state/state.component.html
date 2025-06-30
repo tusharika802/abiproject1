@@ -30,23 +30,47 @@
         </td>
       </tr>
     </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center p-4">
+          <div class="empty-state">
+            <i class="pi pi-map-marker" style="font-size: 3rem; color: #ccc;"></i>
+            <h4 class="mt-3 mb-2">No States Found</h4>
+            <p class="text-muted">No state data available. Click "Add State" to create a new state record.</p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
   </p-table>
 </div>
 <!-- Add Dialog -->
-<p-dialog header="Add New State" [(visible)]="displayAddDialog" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000">
+<p-dialog header="Add New State" [(visible)]="displayAddDialog" [modal]="true" [style]="{ width: '450px', height: '500px' }" [baseZIndex]="10000">
   <div class="form-container">
     <div class="form-field">
       <label>State Name</label>
       <input type="text" pInputText [(ngModel)]="newState.name" class="form-input" placeholder="Enter State Name" />
+      <small class="text-danger" *ngIf="newState.name && newState.name.trim().length < 2">
+        Invalid data: State name must be at least 2 characters
+      </small>
     </div>
     <!-- <div class="form-field">
-      <label> Country Id</label>
-      <input type="text" pInputText [(ngModel)]="newState.countryId" class="form-input" placeholder="Enter Course" />
-    </div> -->
-    <div class="form-field">
       <label>Country Name</label>
-      <input type="text" pInputText [(ngModel)]="newState.countryName" class="form-input" placeholder="Enter Country" />
-    </div>
+      <p-dropdown 
+        [options]="countryList" 
+        [(ngModel)]="newState.countryName" 
+        optionLabel="name" 
+        placeholder="Select Country">
+      </p-dropdown>
+    </div> -->
+
+    <div class="card flex justify-content-center">
+    <p-dropdown 
+        [options]="counties" 
+        (onChange)="onCountryChange($event)"
+        optionLabel="name"
+        placeholder="Select a Country" />
+</div>
   </div>
   
   <ng-template pTemplate="footer">
@@ -56,20 +80,32 @@
 </p-dialog>
 
 <!-- Edit Dialog -->
-<p-dialog header="Edit Student" [(visible)]="displayEditDialog" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000">
+<p-dialog header="Edit State" [(visible)]="displayEditDialog" [modal]="true" [style]="{ width: '450px', height: '500px' }" [baseZIndex]="10000">
   <div class="form-container">
     <div class="form-field">
       <label>State Name</label>
       <input type="text" pInputText [(ngModel)]="editState.name" class="form-input" placeholder="Enter State Name" />
+      <small class="text-danger" *ngIf="editState.name && editState.name.trim().length < 2">
+        Invalid data: State name must be at least 2 characters
+      </small>
     </div>
     <!-- <div class="form-field">
-      <label> Country Id</label>
-      <input type="text" pInputText [(ngModel)]="editState.countryId" class="form-input"/>
-    </div> -->
-    <div class="form-field">
       <label>Country Name</label>
-      <input type="text" pInputText [(ngModel)]="editState.countryName" class="form-input" placeholder="Enter Country" />
-    </div>
+      <p-dropdown 
+        [options]="countryList" 
+        [(ngModel)]="editState.countryName" 
+        optionLabel="name" 
+        placeholder="Select Country">
+      </p-dropdown>
+    </div> -->
+
+    <div class="card flex justify-content-center">
+    <p-dropdown 
+        [options]="counties" 
+        (onChange)="onCountryChange($event)"
+        optionLabel="name"
+        placeholder="Select a Country" />
+</div>
   </div>
 
   <ng-template pTemplate="footer">

@@ -37,7 +37,7 @@
 </div>
 
 <!-- Add Dialog -->
-<p-dialog header="Add New Student" [(visible)]="displayAddDialog" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000">
+<p-dialog header="Add New Student" [(visible)]="displayAddDialog" [modal]="true" [style]="{width: '30vw',height: '650px'}" [baseZIndex]="10000">
   <div class="form-container">
     <div class="form-field">
       <label>Name</label>
@@ -49,16 +49,36 @@
     </div>
     <div class="form-field">
       <label>Country</label>
-      <input type="text" pInputText [(ngModel)]="newStudent.country" class="form-input" placeholder="Enter Country" />
+      <p-dropdown 
+        [options]="countries" 
+        [(ngModel)]="newStudent.country" 
+        optionLabel="name"
+        placeholder="Select Country"
+        (onChange)="onCountryChange($event)">
+      </p-dropdown>
     </div>
+
     <div class="form-field">
       <label>State</label>
-      <input type="text" pInputText [(ngModel)]="newStudent.state" class="form-input" placeholder="Enter State" />
+      <p-dropdown 
+        [options]="filteredStates" 
+        [(ngModel)]="newStudent.state" 
+        optionLabel="name"
+        placeholder="Select State"
+        (onChange)="onStateChange($event)">
+      </p-dropdown>
     </div>
+
     <div class="form-field">
       <label>City</label>
-      <input type="text" pInputText [(ngModel)]="newStudent.city" class="form-input" placeholder="Enter City" />
+      <p-dropdown 
+        [options]="filteredCities" 
+        [(ngModel)]="newStudent.city" 
+        optionLabel="name"
+        placeholder="Select City">
+      </p-dropdown>
     </div>
+
   </div>
   
   <ng-template pTemplate="footer">
@@ -79,18 +99,38 @@
       <label>Course</label>
       <input type="text" pInputText [(ngModel)]="editStudent.course" class="form-input" />
     </div>
-    <div class="form-field">
-      <label>Country</label>
-      <input type="text" pInputText [(ngModel)]="editStudent.country" class="form-input" />
-    </div>
-    <div class="form-field">
-      <label>State</label>
-      <input type="text" pInputText [(ngModel)]="editStudent.state" class="form-input" />
-    </div>
-    <div class="form-field">
-      <label>City</label>
-      <input type="text" pInputText [(ngModel)]="editStudent.city" class="form-input" />
-    </div>
+   <div class="form-field">
+    <label>Country</label>
+    <p-dropdown 
+      [options]="countries" 
+      [(ngModel)]="editStudent.country" 
+      optionLabel="name"
+      placeholder="Select Country"
+      (onChange)="onCountryChange($event, true)">
+    </p-dropdown>
+  </div>
+
+  <div class="form-field">
+    <label>State</label>
+    <p-dropdown 
+      [options]="filteredStates" 
+      [(ngModel)]="editStudent.state" 
+      optionLabel="name"
+      placeholder="Select State"
+      (onChange)="onStateChange($event, true)">
+    </p-dropdown>
+  </div>
+
+  <div class="form-field">
+    <label>City</label>
+    <p-dropdown 
+      [options]="filteredCities" 
+      [(ngModel)]="editStudent.city" 
+      optionLabel="name"
+      placeholder="Select City">
+    </p-dropdown>
+  </div>
+
   </div>
 
   <ng-template pTemplate="footer">
