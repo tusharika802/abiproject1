@@ -28,8 +28,14 @@ export class CityService {
     return this.httpClient.post<ApiResponse>("https://localhost:7075/api/City/Upsert", city);
   }
 
-  deleteCity(id: number): Observable<ApiResponse> {
-    return this.httpClient.delete<ApiResponse>("https://localhost:7075/api/City/" + id);
-  }
+  // deleteCity(id: number): Observable<ApiResponse> {
+  //   return this.httpClient.delete<ApiResponse>("https://localhost:7075/api/City/" + id);
+
+  deleteCity(id: number) {
+  return this.httpClient.delete(`http://localhost:5000/api/City/${id}`, {
+    responseType: 'text' // <- Important
+  });
+}
+
 }
 

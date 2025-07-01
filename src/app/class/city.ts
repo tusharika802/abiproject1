@@ -8,6 +8,5 @@ export class City {
     this.id = 0;
     this.name = '';
     this.stateId = 0;
-    this.stateName = '';
   }
 }

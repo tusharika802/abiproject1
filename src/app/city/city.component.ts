@@ -1,3 +1,4 @@
+import { state } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MessageService,ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
@@ -46,6 +47,8 @@ export class CityComponent implements OnInit {
   displayAddDialog = false;
   displayEditDialog = false;
 filteredCities: any;
+stateId:number = 0;
+stateNmae:any='';
 
   constructor(
     private cityService: CityService,
@@ -62,9 +65,12 @@ filteredCities: any;
   }
 
   sattes : StatesInterface[] = [];
-  onCityChange(event : any):void{
+  onStateChange(event: any): void {
     console.log(event)
+      this.stateId = event;
+      this.ref.markForCheck();
   }
+
   getStates():void{
     this.stateService.getStatesV2().subscribe({
       next:(valeus)=>{
@@ -92,33 +98,34 @@ filteredCities: any;
   
        saving = false;
   
-  saveClick(): void {
-    console.log('Saving city:', this.newCity);
-  
-    this.cityService.saveCity(this.newCity).subscribe({
-      next: (response) => {
-        console.log('Save response:', response); // { success: true, message: "..." }
-  
-        this.getAll();
-        this.displayAddDialog = false;
-        this.newCity = new City();
-  
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success' ,
-          detail: response?.message
-        });
-      },
-      error: (error) => {
-        console.error('Save error:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Could not save city'
-        });
-      }
-    });
-  }
+ saveClick(): void {
+  console.log('Saving city:', this.newCity);
+
+  this.cityService.saveCity(this.newCity).subscribe({
+    next: (response) => {
+      console.log('Save response:', response);
+
+      this.getAll();
+      this.displayAddDialog = false;
+      this.newCity = new City();  // reset form
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: response?.message
+      });
+    },
+    error: (error) => {
+      console.error('Save error:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Could not save city'
+      });
+    }
+  });
+}
+
     editClick(data: City): void {
       this.editCity = { ...data };
       this.displayEditDialog = true;
@@ -145,30 +152,56 @@ filteredCities: any;
     }
   
   
+  // deleteClick(id: number) {
+  //   Swal.fire({
+  //     title: 'Are you sure?',
+  //     text: "Do you really want to delete this record?",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Yes, delete it!'
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       this.cityService.deleteCity(id).subscribe({
+  //         next: () => {
+  //           this.getAll();
+  //           Swal.fire('Deleted!', 'City has been deleted.', 'success');
+  //         },
+  //         error: (err) => {
+  //           console.error('Error deleting city:', err);
+  //           Swal.fire('Error!', 'Failed to delete city.', 'error');
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
+
   deleteClick(id: number) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "Do you really want to delete this record?",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.cityService.deleteCity(id).subscribe({
-          next: () => {
-            this.getAll();
-            Swal.fire('Deleted!', 'City has been deleted.', 'success');
-          },
-          error: (err) => {
-            console.error('Error deleting city:', err);
-            Swal.fire('Error!', 'Failed to delete city.', 'error');
-          }
-        });
-      }
-    });
-  }
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you really want to delete this record?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.cityService.deleteCity(id).subscribe({
+        next: (res) => {
+          this.getAll();
+          Swal.fire('Deleted!', res || 'City deleted.', 'success');
+        },
+        error: (err) => {
+          console.error('Error deleting city:', err);
+          Swal.fire('Error!', err?.error || 'Failed to delete city.', 'error');
+        }
+      });
+    }
+  });
+}
+
   isFormValid(): boolean {
       return this.newCity.name.trim() !== '' && this.newCity.name.trim() !== '';
     }
@@ -184,6 +217,5 @@ filteredCities: any;
   export interface StatesInterface {
   id: number;
   name: string;
-  countryId: number;
-  countryName: string;
+ 
 }

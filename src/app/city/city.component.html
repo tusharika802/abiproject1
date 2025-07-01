@@ -34,18 +34,27 @@
 
 <!-- Add Dialog -->
 <p-dialog header="Add New City" [(visible)]="displayAddDialog" [modal]="true" [style]="{ width: '450px', height: '500px' }" [baseZIndex]="10000">
-  <div class="form-container">
+  <div class="form-container" >
     <div class="form-field">
       <label>City Name</label>
       <input type="text" pInputText [(ngModel)]="newCity.name" class="form-input" placeholder="Enter City Name" />
     </div>
     
       <div class="card flex justify-content-center">
-    <p-dropdown 
+    <!-- <p-dropdown 
         [options]="sattes" 
-        (onChange)="onCityChange($event)"
+            [(ngModel)]="newCity.stateId"
+        (onChange)="onStateChangeV1($event)"
         optionLabel="name"
-        placeholder="Select a State" />
+        placeholder="Select a State" /> -->
+
+         <p-dropdown 
+    [options]="sattes" 
+    [(ngModel)]="newCity.stateId"
+    optionLabel="name"
+    optionValue="id"
+    (onChange)="onStateChange($event)"
+    placeholder="Select a State" />
 </div>
   </div>
 
@@ -62,16 +71,20 @@
       <label>City Name</label>
       <input type="text" pInputText [(ngModel)]="editCity.name" class="form-input" placeholder="Enter Name" />
     </div>
+
     <!-- <div class="form-field">
       <label>State Id</label>
       <input type="text" pInputText [(ngModel)]="editCity.stateId" class="form-input" placeholder="Enter Course" />
     </div> -->
      <div class="card flex justify-content-center">
     <p-dropdown 
-        [options]="sattes" 
-        (onChange)="onCityChange($event)"
-        optionLabel="name"
-        placeholder="Select a State" />
+    [options]="sattes" 
+    [(ngModel)]="editCity.stateId"
+    optionLabel="name"
+    optionValue="id"
+    (onChange)="onStateChange($event)"
+    placeholder="Select a State" />
+
 </div>
   </div>
   
