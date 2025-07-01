@@ -41,6 +41,7 @@ providers: [MessageService, ConfirmationService],
 export class CityComponent implements OnInit {
   cityList: City[] = [];
   newCity: City = new City();
+  selectedState!: StatesInterface;  
   editCity: City = new City();
   displayAddDialog = false;
   displayEditDialog = false;

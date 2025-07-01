@@ -44,6 +44,8 @@ export class StateComponent implements OnInit {
   countryList: any[] = [];
   displayAddDialog: boolean = false;
   displayEditDialog: boolean = false;
+  countryId : number = 0;
+  countryNmae : any = '';
 
   constructor(
       private stateService:   StateService,
@@ -61,6 +63,8 @@ export class StateComponent implements OnInit {
     counties:CountriesInterface[] = [];
     onCountryChange(event : any):void{
       console.log(event)
+      this.countryId = event;
+      this.ref.markForCheck();
     }
     getCountries():void{
       this.countryService.getCountriesVS().subscribe({
@@ -91,9 +95,11 @@ export class StateComponent implements OnInit {
          saving = false;
     
       saveClick(): void {
-        console.log('Saving city:', this.newState);
-      
-        this.stateService.saveState(this.newState).subscribe({
+        console.log('Saving state:', this.newState);
+      var gg = {
+  "name": this.countryNmae,
+  "countryId": this.countryId}
+        this.stateService.saveState(gg).subscribe({
           next: (response) => {
             console.log('Save response:', response); // { success: true, message: "..." }
       

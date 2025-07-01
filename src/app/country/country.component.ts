@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 // PrimeNG Modules
@@ -32,6 +33,7 @@ providers: [MessageService, ConfirmationService],
     InputTextModule,
     ToastModule,
     ConfirmDialogModule,
+    
   ]
 })
 export class CountryComponent implements OnInit {
@@ -44,8 +46,9 @@ export class CountryComponent implements OnInit {
   constructor(
       private countryService: CountryService,
       private messageService: MessageService,
-        private confirmationService: ConfirmationService   // ✅ inject here
-  
+        private confirmationService: ConfirmationService,   // ✅ inject here
+    private ref: ChangeDetectorRef   // ✅ inject this
+
     ) {}
   
     ngOnInit(): void {
@@ -71,35 +74,70 @@ export class CountryComponent implements OnInit {
   
        saving = false;
   
-  saveClick(): void {
-    console.log('Saving country:', this.newCountry);
-  
-    this.countryService.saveCountry(this.newCountry).subscribe({
-      next: (response) => {
-        console.log('Save response:', response); // { success: true, message: "..." }
-  
-        this.getAll();
-        this.displayAddDialog = false;
-        this.newCountry = new Country();
-  
-        this.messageService.add({
-          severity: response.success ? 'success' : 'warn',
-          summary: response.success ? 'Success' : 'Failed',
-          detail: response.message
-        });
-      },
-      error: (error) => {
-        console.error('Save error:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Could not save student'
-        });
-      }
-    });
-  }
-  
-   
+//  saveClick(): void {
+//   console.log('Saving country:', this.newCountry);
+
+//   this.countryService.saveCountry(this.newCountry).subscribe({
+//     next: (response) => {
+//       console.log('Save response:', response); 
+
+//     setTimeout(() => {
+//   this.getAll();
+//   this.ref.detectChanges(); 
+// }, 500);
+
+
+//       this.displayAddDialog = false;
+//       this.newCountry = new Country();
+
+//       this.messageService.add({
+//         severity: response.success ? 'success' : 'warn',
+//         summary: response.success ? 'Success' : 'Failed',
+//         detail: response.message
+//       });
+//     },
+//     error: (error) => {
+//       console.error('Save error:', error);
+//       this.messageService.add({
+//         severity: 'error',
+//         summary: 'Error',
+//         detail: 'Could not save country'
+//       });
+//     }
+//   });
+// }
+saveClick(): void {
+  console.log('Saving country:', this.newCountry);
+
+  this.countryService.saveCountry(this.newCountry).subscribe({
+    next: (response) => {
+      console.log('Save response:', response); 
+
+    setTimeout(() => {
+  this.getAll();
+  this.ref.detectChanges(); 
+}, 500);
+
+
+      this.displayAddDialog = false;
+      this.newCountry = new Country();
+
+      this.messageService.add({
+        severity: response.success ? 'success' : 'warn',
+        summary: response.success ? 'Success' : 'Failed',
+        detail: response.message
+      });
+    },
+    error: (error) => {
+      console.error('Save error:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Could not save country'
+      });
+    }
+  });
+}
     editClick(data: Country): void {
       this.editCountry = { ...data };
       this.displayEditDialog = true;

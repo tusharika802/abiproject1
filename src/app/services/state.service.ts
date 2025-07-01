@@ -23,8 +23,8 @@ export class StateService {
      return this.httpClient.get<StatesInterface[]>("https://localhost:7075/api/State");
    }
  
-   saveState(state: State): Observable<ApiResponse> {
-     return this.httpClient.post<ApiResponse>("https://localhost:7075/api/State/Upsert", state);
+   saveState(state: any): Observable<any> {
+     return this.httpClient.post<any>("https://localhost:7075/api/State/Upsert", state);
  
  }
  
